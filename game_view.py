@@ -1,0 +1,1 @@
+"""The view of the main game window"""

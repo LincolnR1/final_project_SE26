@@ -1,0 +1,1 @@
+"""Controls snake position and state (collision, length, boost, etc)"""
