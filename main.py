@@ -11,7 +11,7 @@ WINDOW_HEIGHT = 720
 WINDOW_TITLE = "Platformer"
 
 
-class GameView(arcade.Window):
+class SnakeGame(arcade.Window):
     """
     Main application class.
     """
@@ -20,6 +20,7 @@ class GameView(arcade.Window):
 
         # Call the parent class to set up the window
         super().__init__(WINDOW_WIDTH, WINDOW_HEIGHT, WINDOW_TITLE)
+        # self.tile_map
 
         self.background_color = arcade.csscolor.CORNFLOWER_BLUE
 
@@ -36,12 +37,13 @@ class GameView(arcade.Window):
         # frame of the game.
         self.clear()
 
+        #self.scene.draw()
         # Code to draw other things will go here
 
 
 def main():
     """Main function"""
-    window = GameView()
+    window = SnakeGame()
     window.setup()
     arcade.run()
 
