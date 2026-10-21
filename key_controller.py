@@ -25,7 +25,7 @@ class KeyController:
             direction = (1,0)
             return (player, direction)
 
-    # Controls player 2's movements
+        # Controls player 2's movements
         elif key == arcade.key.W:
             player = 2
             direction = (0,1)
