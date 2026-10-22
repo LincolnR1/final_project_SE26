@@ -3,7 +3,7 @@
 import arcade
 import key_controller
 import snake
-import maps
+from maps import Maps
 class GameView(arcade.View):
 
     def __init__(self):
@@ -23,7 +23,7 @@ class GameView(arcade.View):
         if movement is not None:
             player, direction = movement
             # Next line is a just and idea as we do  not have anything implemented yet
-            self.game.handle_movement(player, direction)
+            self.handle_movement(player, direction)
 
     def handle_movement(self, player, direction):
         # handles snakes as far as what is what and who is who
@@ -35,7 +35,7 @@ class GameView(arcade.View):
             snake = self.snake2
 
         else:
-            return
+            return None
 
         # sets snake direction
         snake.direction = direction
@@ -46,7 +46,13 @@ class GameView(arcade.View):
         snake.segments.insert(0, (new_x, new_y))
         snake.segments.pop()
 
-    def on_draw(self):
+
+    def make_maps(self):
+        maps = Maps()
+        maps.setup()
+        maps.on_draw()
+
+
 
 
 
