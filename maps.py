@@ -1,14 +1,13 @@
 import arcade
-from arcade.examples.camera_platform import TILE_SCALING
 
 #Note to self, for camera, for the game to fit like we want it to:
 #width should be 960 and height is 720
 # Constants
-WINDOW_WIDTH = 960  
+WINDOW_WIDTH = 960
 WINDOW_HEIGHT = 720
 WINDOW_TITLE = "Cracked_Snake"
 
-class SnakeGame(arcade.Window):
+class Maps(arcade.Window):
     def __init__(self):
         # Call the parent class to set up the window
         super().__init__(WINDOW_WIDTH, WINDOW_HEIGHT, WINDOW_TITLE, center_window=True)
@@ -44,15 +43,11 @@ class SnakeGame(arcade.Window):
         self.clear()
         self.camera.use()
         self.scene.draw()
-        # The clear method should always be called at the start of on_draw.
-        # It clears the whole screen to whatever the background color is
-        # set to. This ensures that you have a clean slate for drawing each
-        # frame of the game.
         # Code to draw other things will go here
 
 def main():
     """Main function"""
-    window = SnakeGame()
+    window = Maps()
     window.setup()
     arcade.run()
 
