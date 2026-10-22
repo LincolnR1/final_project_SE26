@@ -4,18 +4,26 @@ import arcade
 import key_controller
 import snake
 from maps import Maps
-class GameView(arcade.View):
 
+#Note to self, for camera, for the game to fit like we want it to:
+#width should be 960 and height is 720
+# Constants
+# WINDOW_WIDTH = 960
+# WINDOW_HEIGHT = 720
+# WINDOW_TITLE = "Cracked_Snake"
+
+class GameView(arcade.View):
     def __init__(self):
         super().__init__()
         self.key_controller = key_controller.KeyController()
+        # self.tile_map
+        self.background_color = arcade.csscolor.CORNFLOWER_BLUE
+        self.tile_map = None
 
         #creates snakes, no clue if the coords are what we want them to be or not yet though
         self.snake1 = snake.Snake(start_position=(5, 4))
         self.snake2 = snake.Snake(start_position=(15, 4), direction=(-1, 0))
 
-        #attempting to load the map
-        self.tile_map = None
         self.scene = None
 
     def on_key_press(self, symbol, modifiers):
@@ -29,14 +37,10 @@ class GameView(arcade.View):
         # handles snakes as far as what is what and who is who
         if player == 1:
             snake = self.snake1
-
-
         elif player == 2:
             snake = self.snake2
-
         else:
             return None
-
         # sets snake direction
         snake.direction = direction
 
@@ -46,11 +50,27 @@ class GameView(arcade.View):
         snake.segments.insert(0, (new_x, new_y))
         snake.segments.pop()
 
+    def on_show_view(self):
+        """
+        We load all the snake games maps here
+        """
+        layer_options = {
+            "Walls": {"use_spatial_hash": True,
+                      "scaling": 1.0},
+            "Background": {"use_spatial_hash": False,
+                           "scaling": 1.0},
+            }
+        self.tile_map = arcade.load_tilemap("maps/CS3050_final_project_level1.tmx",
+                                            scaling=1, layer_options=layer_options)
+        self.scene = arcade.Scene.from_tilemap(self.tile_map)
+       # self.physics_engine = arcade.PhysicsEngineSimple(walls=self.scene["Walls"])
 
-    def make_maps(self):
-        maps = Maps()
-        maps.setup()
-        maps.on_draw()
+    def on_draw(self):
+        """Render the screen."""
+        self.clear()
+        self.scene.draw()
+
+
 
 
 

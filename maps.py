@@ -44,12 +44,12 @@ class Maps(arcade.Window):
         self.camera.use()
         self.scene.draw()
         # Code to draw other things will go here
+#
+#def main():
+#    """Main function"""
+#    window = Maps()
+#    window.setup()
+#    arcade.run()
 
-def main():
-    """Main function"""
-    window = Maps()
-    window.setup()
-    arcade.run()
-
-if __name__ == "__main__":
-    main()
+#if __name__ == "__main__":
+#    main()
