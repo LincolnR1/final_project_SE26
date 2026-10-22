@@ -1,20 +1,21 @@
-"""Testing file I made while I write snake.py"""
+"""UPDATED Testing file I had made while I write snake.py"""
 
 
 import arcade
 from snake import Snake
 
-# Window settings
-WIDTH = 1000
-HEIGHT = 800
-CELL_SIZE = 15
+# Window configuration
+WIDTH = 800
+HEIGHT = 600
+CELL_SIZE = 25
 
-# Snake movement interval (seconds)
-MOVE_INTERVAL = 0.15
+# Movement intervals (seconds per cell)
+NORMAL_INTERVAL = 0.15
+BOOST_INTERVAL = 0.075
 
 
 class SnakeTest(arcade.Window):
-    """Temporary window for testing the Snake class."""
+    """Testing environment for snake functionality."""
 
     def __init__(self):
         super().__init__(WIDTH, HEIGHT, "Snake Testing")
@@ -27,42 +28,103 @@ class SnakeTest(arcade.Window):
             length=3
         )
 
-        self.move_timer = 0
+        self.move_timer = 0.0
 
     def on_draw(self):
-        """Draw the snake on the screen."""
+        """Draw the snake and boost energy bar."""
         self.clear()
 
-        for x, y in self.snake.segments:
+        # Draw snake segments
+        for index, (x, y) in enumerate(self.snake.segments):
+
+            color = (
+                arcade.color.LIME_GREEN
+                if index == 0
+                else arcade.color.GREEN
+            )
+
             arcade.draw_lbwh_rectangle_filled(
                 x * CELL_SIZE,
                 y * CELL_SIZE,
                 CELL_SIZE - 1,
                 CELL_SIZE - 1,
-                arcade.color.GREEN
+                color
             )
+
+        # Draw boost energy bar background
+        arcade.draw_lbwh_rectangle_filled(
+            20, HEIGHT - 40,
+            200, 20,
+            arcade.color.DARK_GRAY
+        )
+
+        # Draw current boost energy
+        energy_ratio = (
+            self.snake.boost_energy /
+            self.snake.max_boost_energy
+        )
+
+        arcade.draw_lbwh_rectangle_filled(
+            20, HEIGHT - 40,
+            200 * energy_ratio, 20,
+            arcade.color.YELLOW
+        )
+
+        arcade.draw_text(
+            "BOOST (Hold Shift)",
+            20, HEIGHT - 60,
+            arcade.color.WHITE,
+            12
+        )
+
+        # Display boost status
+        status = (
+            "BOOSTING"
+            if self.snake.is_boosting
+            else "NORMAL"
+        )
+
+        arcade.draw_text(
+            f"Speed: {status}",
+            20, HEIGHT - 85,
+            arcade.color.WHITE,
+            12
+        )
 
     def on_update(self, delta_time):
-        """Move the snake at a fixed interval."""
+        """Update boost energy and snake movement."""
+
+        # Update boost state and energy
+        self.snake.update_boost(delta_time)
+
+        # Determine movement speed
+        if self.snake.is_boosting:
+            interval = BOOST_INTERVAL
+        else:
+            interval = NORMAL_INTERVAL
+
+        # Accumulate movement time
         self.move_timer += delta_time
 
-        if self.move_timer >= MOVE_INTERVAL:
-            self.move_timer -= MOVE_INTERVAL
+        # Move when the timer reaches the interval
+        while self.move_timer >= interval:
 
-            # Temporary movement logic
-            head_x, head_y = self.snake.segments[0]
-            dx, dy = self.snake.direction
+            self.snake.move()
 
-            new_head = (
-                (head_x + dx) % (WIDTH // CELL_SIZE),
-                (head_y + dy) % (HEIGHT // CELL_SIZE)
-            )
+            # Temporary wraparound for testing
+            cols = WIDTH // CELL_SIZE
+            rows = HEIGHT // CELL_SIZE
 
-            self.snake.segments.insert(0, new_head)
-            self.snake.segments.pop()
+            self.snake.segments = [
+                (x % cols, y % rows)
+                for x, y in self.snake.segments
+            ]
+
+            self.move_timer -= interval
 
     def on_key_press(self, key, modifiers):
-        """Change the snake's direction."""
+        """Handle direction changes and boost activation."""
+
         directions = {
             arcade.key.UP: (0, 1),
             arcade.key.DOWN: (0, -1),
@@ -70,20 +132,35 @@ class SnakeTest(arcade.Window):
             arcade.key.RIGHT: (1, 0)
         }
 
-        new_direction = directions.get(key)
+        # Movement controls
+        direction = directions.get(key)
 
-        if new_direction is not None:
-            dx, dy = self.snake.direction
+        if direction is not None:
+            self.snake.set_direction(direction)
 
-            # Prevent reversing directly into the body
-            if new_direction != (-dx, -dy):
-                self.snake.direction = new_direction
+        # Start boosting
+        if key in (
+            arcade.key.LSHIFT,
+            arcade.key.RSHIFT
+        ):
+            self.snake.set_boosting(True)
+
+    def on_key_release(self, key, modifiers):
+        """Stop boosting when Shift is released."""
+
+        if key in (
+            arcade.key.LSHIFT,
+            arcade.key.RSHIFT
+        ):
+            self.snake.set_boosting(False)
 
 
 def main():
+    """Start the snake testing window."""
     SnakeTest()
     arcade.run()
 
 
 if __name__ == "__main__":
     main()
+

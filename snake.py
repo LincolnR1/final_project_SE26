@@ -8,7 +8,14 @@ class Snake:
         self.next_direction = direction
         self.segments = []
 
-        
+        #boost settings 
+        self.max_boost_energy = 100.0
+        self.boost_energy = self.max_boost_energy
+
+        self.boost_drain_rate = 30.0 #can be fixed later with testing
+        self.boost_regen_rate = 15.0
+
+        self.is_boosting = False
 
         for i in range(length):
             x = start_position[0] - i * direction[0]
@@ -56,6 +63,43 @@ class Snake:
                 return False
 
         self.next_direction = new_direction
-        
+
         return True
-        
+
+    
+    def set_boosting(self, active):
+        """Start or stop boost."""
+
+        if active and self.boost_energy <= 0:
+            self.is_boosting = False
+            return False
+
+        self.is_boosting = active
+        return True
+
+    # round.py will call this method
+    ## NOTE:
+    """KeyController identifies the boost input.
+    GameView forwards the request to Round.
+    Round finds Player 1's snake and calls snake.set_boosting(True).
+    Each frame, Round calls snake.update_boost(delta_time).
+    Round checks snake.is_boosting to determine how frequently to call snake.move().""" 
+    """GameView drives the update cycle, Round schedules gameplay movement, and Snake executes individual moves."""
+    def update_boost(self, delta_time):
+        """Update boost based on time."""
+
+        if self.is_boosting:
+            self.boost_energy -= self.boost_drain_rate * delta_time
+
+            if self.boost_energy <= 0:
+                self.boost_energy = 0
+                self.is_boosting = False
+
+        else:
+            self.boost_energy += self.boost_regen_rate * delta_time
+
+            self.boost_energy = min(
+                self.boost_energy,
+                self.max_boost_energy
+            )
+    
