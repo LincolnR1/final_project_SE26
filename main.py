@@ -1,7 +1,5 @@
 """
-Platformer Game
-
-python -m arcade.examples.platform_tutorial.01_open_window
+Main file. Loads Arcade window and Game View (and eventually others) on top of it. 
 """
 import arcade
 from game_view import GameView

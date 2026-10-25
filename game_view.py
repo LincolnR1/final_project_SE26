@@ -121,45 +121,47 @@ class GameView(arcade.View):
                 color
             )
 
-            # Draw boost energy bar background
-        arcade.draw_lbwh_rectangle_filled(
-            20, HEIGHT - 40,
-            200, 20,
-            arcade.color.DARK_GRAY
-        )
+        ##TODO: add boost functionality, code commented out for now
+        #     # Draw boost energy bar background
+        # arcade.draw_lbwh_rectangle_filled(
+        #     20, HEIGHT - 40,
+        #     200, 20,
+        #     arcade.color.DARK_GRAY
+        # )
 
+        
         # Draw current boost energy
-        energy_ratio = (
-                self.snake.boost_energy /
-                self.snake.max_boost_energy
-        )
+        # energy_ratio = (
+        #         self.snake.boost_energy /
+        #         self.snake.max_boost_energy
+        # )
+       
+        # arcade.draw_lbwh_rectangle_filled(
+        #     20, HEIGHT - 40,
+        #         200 * energy_ratio, 20,
+        #     arcade.color.YELLOW
+        # )
 
-        arcade.draw_lbwh_rectangle_filled(
-            20, HEIGHT - 40,
-                200 * energy_ratio, 20,
-            arcade.color.YELLOW
-        )
-
-        arcade.draw_text(
-            "BOOST (Hold Shift)",
-            20, HEIGHT - 60,
-            arcade.color.WHITE,
-            12
-        )
+        # arcade.draw_text(
+        #     "BOOST (Hold Shift)",
+        #     20, HEIGHT - 60,
+        #     arcade.color.WHITE,
+        #     12
+        # )
 
         # Display boost status
-        status = (
-            "BOOSTING"
-            if self.snake.is_boosting
-            else "NORMAL"
-        )
+        # status = (
+        #     "BOOSTING"
+        #     if self.snake.is_boosting
+        #     else "NORMAL"
+        # )
 
-        arcade.draw_text(
-            f"Speed: {status}",
-            20, HEIGHT - 85,
-            arcade.color.WHITE,
-            12
-        )
+        # arcade.draw_text(
+        #     f"Speed: {status}",
+        #     20, HEIGHT - 85,
+        #     arcade.color.WHITE,
+        #     12
+        # )
 
 
 
