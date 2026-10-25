@@ -79,7 +79,7 @@ class GameView(arcade.View):
         else:
             return None
         # sets snake direction
-        snake.direction = direction
+        snake.set_direction(direction)
 
         # tells snake where to move
         # new_x = snake.segments[0][0] + snake.direction[0]
