@@ -11,8 +11,8 @@ import snake
 # WINDOW_HEIGHT = 720
 # WINDOW_TITLE = "Cracked_Snake"
 # Window configuration
-WIDTH = 800
-HEIGHT = 600
+WIDTH = 960
+HEIGHT = 720
 CELL_SIZE = 25
 
 # Movement intervals (seconds per cell)
@@ -24,13 +24,15 @@ class GameView(arcade.View):
         super().__init__()
         self.key_controller = key_controller.KeyController()
         # self.tile_map
-        self.background_color = arcade.csscolor.CORNFLOWER_BLUE
+        self.background_color = arcade.csscolor.LIGHT_GREEN
         self.tile_map = None
 
 
         #creates snakes, no clue if the coords are what we want them to be or not yet though
-        self.snake = snake.Snake(start_position=(5, 4), direction=(1, 0), length=3)
-       # self.snake2 = Snake(start_position=(15, 4), direction=(-1, 0))
+        #created enemy snake 11/1 TW
+        self.player_snake = snake.Snake(start_position=(5, 4), direction=(1, 0), length=3)
+        self.enemy_snake = snake.Snake(start_position=(15, 4), direction=(-1, 0))
+
         self.move_timer = 0.0
         self.scene = None
 
@@ -44,10 +46,10 @@ class GameView(arcade.View):
     def on_update(self, delta_time):
         """Update boost energy and snake movement."""
         # Update boost state and energy
-        self.snake.update_boost(delta_time)
+        self.player_snake.update_boost(delta_time)
 
         # Determine movement speed
-        if self.snake.is_boosting:
+        if self.player_snake.is_boosting:
             interval = BOOST_INTERVAL
         else:
             interval = NORMAL_INTERVAL
@@ -57,23 +59,27 @@ class GameView(arcade.View):
 
         # Move when the timer reaches the interval
         while self.move_timer >= interval:
-
-            self.snake.move()
+            self.enemy_snake.move()
+            self.player_snake.move()
 
             # Temporary wraparound for testing
             cols = WIDTH // CELL_SIZE
             rows = HEIGHT // CELL_SIZE
 
-            self.snake.segments = [
+            self.player_snake.segments = [
                 (x % cols, y % rows)
-                for x, y in self.snake.segments
+                for x, y in self.player_snake.segments
+            ]
+            self.enemy_snake.segments = [
+                (x % cols, y % rows)
+                for x, y in self.enemy_snake.segments
             ]
             self.move_timer -= interval
 
     def handle_movement(self, player, direction):
         # handles snakes as far as what is what and who is who
         if player == 1:
-            snake = self.snake
+            snake = self.player_snake
      #   elif player == 2:
      #       snake = self.snake2
         else:
@@ -106,7 +112,21 @@ class GameView(arcade.View):
         """Render the screen."""
         self.clear()
         self.scene.draw()
-        for index, (x, y) in enumerate(self.snake.segments):
+        for index, (x, y) in enumerate(self.player_snake.segments):
+            color = (
+                arcade.color.LIME_GREEN
+                if index == 0
+                else arcade.color.GREEN
+            )
+
+            arcade.draw_lbwh_rectangle_filled(
+                x * CELL_SIZE,
+                y * CELL_SIZE,
+                CELL_SIZE - 1,
+                CELL_SIZE - 1,
+                color
+            )
+        for index, (x, y) in enumerate(self.enemy_snake.segments):
             color = (
                 arcade.color.LIME_GREEN
                 if index == 0

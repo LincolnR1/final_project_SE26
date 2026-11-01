@@ -12,7 +12,7 @@ class Maps(arcade.Window):
         # Call the parent class to set up the window
         super().__init__(WINDOW_WIDTH, WINDOW_HEIGHT, WINDOW_TITLE, center_window=True)
         # self.tile_map
-        self.background_color = arcade.csscolor.CORNFLOWER_BLUE
+
         self.tile_map = None
 
         self.camera = None

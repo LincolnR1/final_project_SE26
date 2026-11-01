@@ -17,8 +17,6 @@ class SnakeGame(arcade.Window):
     def __init__(self):
         # Call the parent class to set up the window
         super().__init__(WINDOW_WIDTH, WINDOW_HEIGHT, WINDOW_TITLE)
-        # self.tile_map
-        self.background_color = arcade.csscolor.CORNFLOWER_BLUE
 
 def main():
     """Main function"""
