@@ -11,8 +11,8 @@ import snake
 # WINDOW_HEIGHT = 720
 # WINDOW_TITLE = "Cracked_Snake"
 # Window configuration
-WIDTH = 800
-HEIGHT = 600
+WIDTH = 960
+HEIGHT = 720
 CELL_SIZE = 25
 
 # Movement intervals (seconds per cell)
@@ -30,7 +30,7 @@ class GameView(arcade.View):
 
         #creates snakes, no clue if the coords are what we want them to be or not yet though
         self.snake = snake.Snake(start_position=(5, 4), direction=(1, 0), length=3)
-       # self.snake2 = Snake(start_position=(15, 4), direction=(-1, 0))
+        self.snake2 = snake.Snake(start_position=(15, 4), direction=(-1, 0))
         self.move_timer = 0.0
         self.scene = None
 
@@ -74,18 +74,15 @@ class GameView(arcade.View):
         # handles snakes as far as what is what and who is who
         if player == 1:
             snake = self.snake
-     #   elif player == 2:
-     #       snake = self.snake2
+        elif player == 2:
+            snake2 = self.snake
         else:
             return None
         # sets snake direction
         snake.set_direction(direction)
+        snake2.set_direction(direction)
 
-        # tells snake where to move
-        # new_x = snake.segments[0][0] + snake.direction[0]
-        # new_y = snake.segments[0][1] + snake.direction[1]
-        # snake.segments.insert(0, (new_x, new_y))
-        # snake.segments.pop()
+
 
     def on_show_view(self):
         """
