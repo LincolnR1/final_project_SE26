@@ -13,7 +13,7 @@ import snake
 # Window configuration
 WIDTH = 960
 HEIGHT = 720
-CELL_SIZE = 25
+CELL_SIZE = 15
 
 # Movement intervals (seconds per cell)
 NORMAL_INTERVAL = 0.15
@@ -114,7 +114,7 @@ class GameView(arcade.View):
         self.scene.draw()
         for index, (x, y) in enumerate(self.player_snake.segments):
             color = (
-                arcade.color.LIME_GREEN
+                arcade.color.GREEN
                 if index == 0
                 else arcade.color.GREEN
             )
@@ -128,9 +128,9 @@ class GameView(arcade.View):
             )
         for index, (x, y) in enumerate(self.enemy_snake.segments):
             color = (
-                arcade.color.LIME_GREEN
+                arcade.color.RED
                 if index == 0
-                else arcade.color.GREEN
+                else arcade.color.RED
             )
 
             arcade.draw_lbwh_rectangle_filled(
