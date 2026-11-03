@@ -80,8 +80,8 @@ class GameView(arcade.View):
         # handles snakes as far as what is what and who is who
         if player == 1:
             snake = self.player_snake
-     #   elif player == 2:
-     #       snake = self.snake2
+        elif player == 2:
+            snake = self.enemy_snake
         else:
             return None
         # sets snake direction
