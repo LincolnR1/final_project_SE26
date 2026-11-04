@@ -1,5 +1,9 @@
 
 #here are the basic ideas of the collision detection and round setup
+import arcade
+
+# NOTE: eventually this file will be moving the snakes instead of game_view
+# the stuff I have added is built with that in mind but could also be altered
 
 def __init__(self):
     #init scores to 0
@@ -81,3 +85,62 @@ def update(self, delta_time):
     #will call setup(), so things that are intilized there wont carry through rounds.
     if round_over:
         self.setup()
+
+
+CELL_SIZE = 32
+def grid_to_pixel(pos):
+    """Helper function to convert a grid position to pixel coordinates"""
+    x, y = pos
+
+    return (x * CELL_SIZE + CELL_SIZE / 2, y * CELL_SIZE + CELL_SIZE / 2)
+
+class SnakeSprites:
+    """Class to manage the snakes as SpriteLists while keeping movement
+    logic seperate in snake.py, observes the snakes state and updates sprites accordingly"""
+
+    #NOTE:eventually when Round moves a snake it will look like:
+    #
+    # init()
+    #   self.snake_visual = SnakeSprites(self.snake)
+    #
+    # on_update()
+    #   snake.move() - moves the acutal snake
+    #   snake_sprites.sync_positions() - observes the snake and updates sprites 
+    #
+    # on_draw() in game_view
+    #   self.snake_visual.sprites.draw()
+    # 
+    # all of that together will move the snake and update the
+    # sprites(which are more like hitboxes) to match so collisions 
+    # can be checked using arcades functions
+
+    def __init__(self, snake):
+        self.snake = snake
+        self.sprites = arcade.SpriteList()
+
+        for position in self.snake.segments:
+            sprite = arcade.SpriteSolidColor(
+                CELL_SIZE, 
+                CELL_SIZE, 
+                color=arcade.color.GREEN
+            )
+
+            sprite.position = grid_to_pixel(position)
+
+            self.sprites.append(sprite)
+        # allows us to identify the head as head_sprite = self.sprites[0]
+
+    def sync_positions(self):
+        """Update sprite positions to match snake segments"""
+
+        for sprite, position in zip(
+            self.sprites, 
+            self.snake.segments
+        ):
+            sprite.position = grid_to_pixel(position)
+    
+    @property
+    def head(self):
+        """Return  snakes head sprite, allows access as '{variable_for_snake_sprite}.head'"""
+        return self.sprites[0]
+    
