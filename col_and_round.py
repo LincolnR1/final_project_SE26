@@ -17,6 +17,9 @@ def setup(self):
     #by batch drawing
     #the snake lists cant have spatial hashing enabled, but
     #the wall list in theory can, and will be faster for it
+    '''
+    https://api.arcade.academy/en/2.6.17/api/sprite_list.html?highlight=check_for_collision_with_list#arcade.SpriteList
+    '''
     snake1_spirte_list = all_collidable_snake1_sprites
     snake2_sprite_list = all_collidable_snake2_sprites
     
@@ -49,13 +52,17 @@ def update(self, delta_time):
     #the first passed value is the collider
     #the list passed is objects its checking if it colided with
 
+    '''
+    https://api.arcade.academy/en/2.6.17/api/sprite_list.html?highlight=check_for_collision_with_list#arcade.check_for_collision_with_list
+    '''
+    
     #these are checking for collisions with walls
     p1_col_list.add(arcade.check_for_collision_with_list(snake1_head, wall_list))
     p2_col_list.add(arcade.check_for_collision_with_list(snake2_head, wall_list))
 
     #these check for collisions with other snake bodies
     #if snake1_head hits snake2_body, count as snake2 colliding for points
-
+    
     p2_col_list.add(arcade.check_for_collision_with_list(snake1_head, snake2_spirte_list))
     p1_col_list.add(arcade.check_for_collision_with_list(snake2_head, snake1_spirte_list))
 
