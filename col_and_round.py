@@ -105,7 +105,7 @@ class SnakeSprites:
     #
     # on_update()
     #   snake.move() - moves the acutal snake
-    #   snake_sprites.sync_positions() - observes the snake and updates sprites 
+    #   snake_visual.sync_positions() - observes the snake and updates sprites 
     #
     # on_draw() in game_view
     #   self.snake_visual.sprites.draw()
