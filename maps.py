@@ -6,6 +6,17 @@ import arcade
 WINDOW_WIDTH = 960
 WINDOW_HEIGHT = 720
 WINDOW_TITLE = "Cracked_Snake"
+class Title_Screen(arcade.View):
+    def on_show_view(self) -> None:
+        "This shows the title screen"
+
+    def on_draw(self) -> None:
+        "This should render the screen."
+
+    def on_mouse_press(self, x: int, y: int, button: int, modifiers: int) -> None:
+        "This will transition to the game screen."
+
+
 
 class Maps(arcade.Window):
     def __init__(self):
