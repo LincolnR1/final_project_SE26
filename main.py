@@ -2,7 +2,8 @@
 Main file. Loads Arcade window and Game View (and eventually others) on top of it. 
 """
 import arcade
-from game_view import GameView
+from title_screen import Title_Screen
+
 
 # Constants
 WINDOW_WIDTH = 960
@@ -21,8 +22,7 @@ class SnakeGame(arcade.Window):
 def main():
     """Main function"""
     window = arcade.Window(WINDOW_WIDTH, WINDOW_HEIGHT, "Cracked Snake Game", center_window=True)
-    menu_view = GameView()
-    window.show_view(menu_view)
+    window.show_view(Title_Screen())
     arcade.run()
 
 if __name__ == "__main__":
