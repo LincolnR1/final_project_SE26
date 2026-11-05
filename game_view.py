@@ -31,13 +31,16 @@ class GameView(arcade.View):
         self.background_color = arcade.csscolor.LIGHT_GREEN
         self.tile_map = None
 
+        self.wall_list = arcade.SpriteList(use_spatial_hash=True,
+                                           spatial_hash_cell_size=128)
+
 
 
         #creates snakes, no clue if the coords are what we want them to be or not yet though
         #created enemy snake 11/1 TW
         self.player_snake = snake.Snake(start_position=(5, 4), direction=(1, 0), length=3)
         self.enemy_snake = snake.Snake(start_position=(15, 4), direction=(-1, 0))
-
+   #     self.barrier_list = arcade.AStarBarrierList(self.enemy_snake, self.wall_list, CELL_SIZE,0,0,1280, 720)
         self.move_timer = 0.0
         self.scene = None
 
@@ -98,6 +101,8 @@ class GameView(arcade.View):
 
         # Accumulate movement time
         self.move_timer += delta_time
+
+       # self.path = arcade.astar_calculate_path(self.enemy_snake)
 
         cols = WIDTH #cell size
         rows = HEIGHT # cell_size

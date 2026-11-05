@@ -33,7 +33,7 @@ class Maps(arcade.Window):
         self.tile_map = arcade.load_tilemap("maps/CS3050_final_project_level1.tmx",
                                             scaling=1, layer_options=layer_options)
         self.scene = arcade.Scene.from_tilemap(self.tile_map)
-       # self.physics_engine = arcade.PhysicsEngineSimple(walls=self.scene["Walls"])
+        self.physics_engine = arcade.PhysicsEngineSimple(walls=self.scene["Walls"])
 
     def update(self):
         self.physics_engine.update()
