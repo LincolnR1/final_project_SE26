@@ -3,6 +3,7 @@
 import arcade
 import key_controller
 import snake
+import random
 
 #Note to self, for camera, for the game to fit like we want it to:
 #width should be 960 and height is 720
@@ -19,6 +20,9 @@ CELL_SIZE = 15
 NORMAL_INTERVAL = 0.15
 BOOST_INTERVAL = 0.075
 
+# For spawning in objectives
+GRID_COLS = WIDTH // CELL_SIZE
+GRID_ROWS = HEIGHT // CELL_SIZE
 class GameView(arcade.View):
     def __init__(self):
         super().__init__()
@@ -28,6 +32,7 @@ class GameView(arcade.View):
         self.tile_map = None
 
 
+
         #creates snakes, no clue if the coords are what we want them to be or not yet though
         #created enemy snake 11/1 TW
         self.player_snake = snake.Snake(start_position=(5, 4), direction=(1, 0), length=3)
@@ -35,6 +40,43 @@ class GameView(arcade.View):
 
         self.move_timer = 0.0
         self.scene = None
+
+        self.objective = None
+
+
+    # Basically goes through cells and keeps track of ones where the snake is, etc, need to add walls and obstacles to this
+    def occupied_cells(self) -> set:
+        cells = set()
+        for current_snake in (self.player_snake, self.enemy_snake):
+            cells.update(current_snake.segments)
+        return cells
+
+    # Spawns the square in a random spot for which is not being occupied
+    def spawn_objective(self) -> None:
+        occupied = self.occupied_cells()
+        free_cells = [(col, row)
+                      for col in range(GRID_COLS)
+                      for row in range(GRID_ROWS)
+                      if (col, row) not in occupied]
+        self.objective = random.choice(free_cells)
+
+    # Draws the objective rectangle
+    def draw_objective(self) -> None:
+        if self.objective is None:
+            return
+        col, row = self.objective
+        arcade.draw_lbwh_rectangle_filled(
+            col * CELL_SIZE + 2, row * CELL_SIZE + 2,
+            CELL_SIZE - 4, CELL_SIZE - 4,
+            arcade.color.ELECTRIC_BLUE,
+            )
+
+    # checks of the snake head hit the objective
+    def check_objective(self) -> None:
+        for current_snake in (self.player_snake, self.enemy_snake):
+            if current_snake.segments[0] == self.objective:
+                self.spawn_objective()
+                return
 
     def on_key_press(self, symbol, modifiers):
         movement = self.key_controller.get_movement(symbol)
@@ -57,6 +99,8 @@ class GameView(arcade.View):
         # Accumulate movement time
         self.move_timer += delta_time
 
+        cols = WIDTH #cell size
+        rows = HEIGHT # cell_size
         # Move when the timer reaches the interval
         while self.move_timer >= interval:
             self.enemy_snake.move()
@@ -74,7 +118,9 @@ class GameView(arcade.View):
                 (x % cols, y % rows)
                 for x, y in self.enemy_snake.segments
             ]
+
             self.move_timer -= interval
+            self.check_objective()
 
     def handle_movement(self, player, direction):
         # handles snakes as far as what is what and who is who
@@ -106,12 +152,14 @@ class GameView(arcade.View):
         self.tile_map = arcade.load_tilemap("maps/CS3050_final_project_level1.tmx",
                                             scaling=1, layer_options=layer_options)
         self.scene = arcade.Scene.from_tilemap(self.tile_map)
+        self.spawn_objective()
        # self.physics_engine = arcade.PhysicsEngineSimple(walls=self.scene["Walls"])
 
     def on_draw(self):
         """Render the screen."""
         self.clear()
         self.scene.draw()
+        self.draw_objective()
         for index, (x, y) in enumerate(self.player_snake.segments):
             color = (
                 arcade.color.GREEN
