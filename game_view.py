@@ -23,6 +23,15 @@ BOOST_INTERVAL = 0.075
 # For spawning in objectives
 GRID_COLS = WIDTH // CELL_SIZE
 GRID_ROWS = HEIGHT // CELL_SIZE
+
+# Constant for directions for AI
+DIRECTIONS = {
+    "UP": (0,1),
+    "DOWN": (0,-1),
+    "RIGHT": (-1,0),
+    "LEFT": (1,0)
+
+}
 class GameView(arcade.View):
     def __init__(self):
         super().__init__()
@@ -40,6 +49,7 @@ class GameView(arcade.View):
         #created enemy snake 11/1 TW
         self.player_snake = snake.Snake(start_position=(5, 4), direction=(1, 0), length=3)
         self.enemy_snake = snake.Snake(start_position=(15, 4), direction=(-1, 0))
+        self.update_enemy_direction()
    #     self.barrier_list = arcade.AStarBarrierList(self.enemy_snake, self.wall_list, CELL_SIZE,0,0,1280, 720)
         self.move_timer = 0.0
         self.scene = None
@@ -88,10 +98,21 @@ class GameView(arcade.View):
             # Next line is a just and idea as we do  not have anything implemented yet
             self.handle_movement(player, direction)
 
+    def update_enemy_direction(self):
+        enemy_x, enemy_y = self.enemy_snake.segments[0]
+        #target_x, target_y = self.objective
+
+        self.current_direction = random.choice(DIRECTIONS)
+
+
+
+
+
     def on_update(self, delta_time):
         """Update boost energy and snake movement."""
         # Update boost state and energy
         self.player_snake.update_boost(delta_time)
+        self.enemy_snake.update_enemy_direction()
 
         # Determine movement speed
         if self.player_snake.is_boosting:
