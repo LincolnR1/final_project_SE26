@@ -5,6 +5,7 @@ import key_controller
 import snake
 import random
 
+
 #Note to self, for camera, for the game to fit like we want it to:
 #width should be 960 and height is 720
 # Constants
@@ -24,14 +25,7 @@ BOOST_INTERVAL = 0.075
 GRID_COLS = WIDTH // CELL_SIZE
 GRID_ROWS = HEIGHT // CELL_SIZE
 
-# Constant for directions for AI
-DIRECTIONS = {
-    "UP": (0,1),
-    "DOWN": (0,-1),
-    "RIGHT": (-1,0),
-    "LEFT": (1,0)
 
-}
 class GameView(arcade.View):
     def __init__(self):
         super().__init__()
@@ -49,7 +43,7 @@ class GameView(arcade.View):
         #created enemy snake 11/1 TW
         self.player_snake = snake.Snake(start_position=(5, 4), direction=(1, 0), length=3)
         self.enemy_snake = snake.Snake(start_position=(15, 4), direction=(-1, 0))
-        self.update_enemy_direction()
+
    #     self.barrier_list = arcade.AStarBarrierList(self.enemy_snake, self.wall_list, CELL_SIZE,0,0,1280, 720)
         self.move_timer = 0.0
         self.scene = None
@@ -95,16 +89,37 @@ class GameView(arcade.View):
         movement = self.key_controller.get_movement(symbol)
         if movement is not None:
             player, direction = movement
+
+            if player == 1:
             # Next line is a just and idea as we do  not have anything implemented yet
-            self.handle_movement(player, direction)
+                self.handle_movement(player, direction)
 
     def update_enemy_direction(self):
+
+        # Mk
+        if self.objective is None:
+            return
+
+        # Looks at enemy snakes current coordinates and compares them to
+        # the objectives coordinates and adjusts the coordinates based on them
         enemy_x, enemy_y = self.enemy_snake.segments[0]
-        #target_x, target_y = self.objective
+        target_x, target_y = self.objective
 
-        self.current_direction = random.choice(DIRECTIONS)
+        if target_x > enemy_x:
+            direction = (1, 0)
 
+        elif target_y > enemy_y:
+            direction = (0, 1)
 
+        elif target_y < enemy_y:
+            direction = (0, -1)
+
+        elif target_x < enemy_x:
+            direction = (-1, 0)
+        else:
+            return
+
+        self.handle_movement(2, direction)
 
 
 
@@ -112,7 +127,7 @@ class GameView(arcade.View):
         """Update boost energy and snake movement."""
         # Update boost state and energy
         self.player_snake.update_boost(delta_time)
-        self.enemy_snake.update_enemy_direction()
+
 
         # Determine movement speed
         if self.player_snake.is_boosting:
@@ -125,10 +140,10 @@ class GameView(arcade.View):
 
        # self.path = arcade.astar_calculate_path(self.enemy_snake)
 
-        cols = WIDTH #cell size
-        rows = HEIGHT # cell_size
+
         # Move when the timer reaches the interval
         while self.move_timer >= interval:
+            self.update_enemy_direction()
             self.enemy_snake.move()
             self.player_snake.move()
 
@@ -147,6 +162,7 @@ class GameView(arcade.View):
 
             self.move_timer -= interval
             self.check_objective()
+
 
     def handle_movement(self, player, direction):
         # handles snakes as far as what is what and who is who
