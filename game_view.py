@@ -96,7 +96,7 @@ class GameView(arcade.View):
 
     def update_enemy_direction(self):
 
-        # Mk
+        #
         if self.objective is None:
             return
 
