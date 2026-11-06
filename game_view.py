@@ -5,7 +5,7 @@ import key_controller
 import snake
 import random
 from col_and_round import Round
-
+import consts
 
 #Note to self, for camera, for the game to fit like we want it to:
 #width should be 960 and height is 720
@@ -14,9 +14,9 @@ from col_and_round import Round
 # WINDOW_HEIGHT = 720
 # WINDOW_TITLE = "Cracked_Snake"
 # Window configuration
-WIDTH = 960
-HEIGHT = 720
-CELL_SIZE = 15
+WIDTH = consts.WIDTH
+HEIGHT = consts.HEIGHT
+CELL_SIZE = consts.CELL_SIZE
 
 # Movement intervals (seconds per cell)
 NORMAL_INTERVAL = 0.15
@@ -179,7 +179,7 @@ class GameView(arcade.View):
         self.clear()
         self.scene.draw()
         self.draw_objective()
-        
+
         self.round.snake_visuals[1].sprites.draw()
         self.round.snake_visuals[2].sprites.draw()
 
