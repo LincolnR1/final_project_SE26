@@ -133,6 +133,10 @@ class Round:
                 if self.check_wall_collision(player):
                     print(f"Player {player} hit a wall")
 
+                # check for snake collisions
+                if self.check_snake_collision(player):
+                    print(f"Player {player} hit the opponent")
+
                 self.move_timers[player] -= interval
 
     def check_wall_collision(self, player):
@@ -142,6 +146,21 @@ class Round:
         collisions = arcade.check_for_collision_with_list(
             head,
             self.wall_sprites
+        )
+
+        return bool(collisions)
+
+    def check_snake_collision(self, player):
+        """Check is there are collisions between players"""
+        head = self.snake_visuals[player].head
+
+        opponent = 2 if player == 1 else 1
+
+        opponent_sprites = self.snake_visuals[opponent].sprites
+
+        collisions = arcade.check_for_collision_with_list(
+            head,
+            opponent_sprites
         )
 
         return bool(collisions)
