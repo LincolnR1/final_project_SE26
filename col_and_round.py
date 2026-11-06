@@ -1,13 +1,14 @@
 
 #here are the basic ideas of the collision detection and round setup
 import arcade
+import consts
 
 # NOTE: eventually this file will be moving the snakes instead of game_view
 # the stuff I have added is built with that in mind but could also be altered
 
     
 
-CELL_SIZE = 32
+CELL_SIZE = consts.CELL_SIZE
 
 class Round:
     """Manages gameplay for the current round."""

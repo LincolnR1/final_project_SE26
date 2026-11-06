@@ -8,19 +8,15 @@ from col_and_round import Round
 import consts
 
 #Note to self, for camera, for the game to fit like we want it to:
-#width should be 960 and height is 720
-# Constants
-# WINDOW_WIDTH = 960
-# WINDOW_HEIGHT = 720
-# WINDOW_TITLE = "Cracked_Snake"
+
 # Window configuration
 WIDTH = consts.WIDTH
 HEIGHT = consts.HEIGHT
 CELL_SIZE = consts.CELL_SIZE
 
 # Movement intervals (seconds per cell)
-NORMAL_INTERVAL = 0.15
-BOOST_INTERVAL = 0.075
+NORMAL_INTERVAL = consts.NORMAL_INTERVAL
+BOOST_INTERVAL = consts.BOOST_INTERVAL
 
 # For spawning in objectives
 GRID_COLS = WIDTH // CELL_SIZE
