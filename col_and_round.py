@@ -113,6 +113,26 @@ class Round:
         self.normal_interval = 0.15
         self.boost_interval = 0.075
 
+        # keep track of lives
+        self.lives = {
+            1: 3,
+            2: 3
+        }
+
+        # keep track of time till respawn
+        self.respawn_timers = {
+            1: 0.0,
+            2: 0.0
+        }
+
+        # whether a snake is respawning currently
+        self.respawning = {
+            1: False,
+            2: False
+        }
+
+        self.respawn_delay = 1.5
+
     def update(self, delta_time):
 
         for player, snake in self.snakes.items():
@@ -164,6 +184,23 @@ class Round:
         )
 
         return bool(collisions)
+
+    def handle_collision(self, player):
+        if self.respawning[player]:
+            return
+
+        self.lives[player] -= 1
+
+        print(f"Player {player} lost a life!")
+        print(f"Lives remaining: {self.lives[player]}")
+
+        if self.lives[player] <= 0:
+            print(f"Player {player} is eliminated!")
+            self.respawning[player] = True
+            return
+
+        self.respawning[player] = True
+        self.respawn_timers[player] = self.respawn_delay
 
 def grid_to_pixel(pos):
     """Helper function to convert a grid position to pixel coordinates"""
