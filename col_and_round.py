@@ -22,6 +22,8 @@ class Round:
             1: SnakeSprites(snake1),
             2: SnakeSprites(snake2)
         }
+   
+        
         #both accessible as self.snakes[1 or 2] and self.snake_visuals[1 or 2]
 
         self.wall_sprites = wall_sprites
@@ -71,18 +73,18 @@ class Round:
                 self.snake_visuals[player].sync_positions()
 
                 # check for wall collisions
-                if self.check_wall_collision(player):
+                if self.check_wall_collision(self.snake_visuals[player].sprites):
                     print(f"Player {player} hit a wall")
 
                 # check for snake collisions
-                if self.check_snake_collision(player):
+                if self.check_snake_collision(self.snake_visuals[player].sprites):
                     print(f"Player {player} hit the opponent")
 
                 self.move_timers[player] -= interval
 
     def check_wall_collision(self, player):
         """Check if there are collisions between a players head and walls"""
-        head = self.snake_visuals[player].head
+        head = player[0]
 
         collisions = arcade.check_for_collision_with_list(
             head,
@@ -93,7 +95,7 @@ class Round:
 
     def check_snake_collision(self, player):
         """Check is there are collisions between players"""
-        head = self.snake_visuals[player].head
+        head = player[0]
 
         opponent = 2 if player == 1 else 1
 
@@ -157,7 +159,7 @@ class SnakeSprites:
             sprite = arcade.SpriteSolidColor(
                 CELL_SIZE, 
                 CELL_SIZE, 
-                color=arcade.color.GREEN
+                color=snake.color
             )
 
             sprite.position = grid_to_pixel(position)
@@ -167,7 +169,6 @@ class SnakeSprites:
 
     def sync_positions(self):
         """Update sprite positions to match snake segments"""
-
         for sprite, position in zip(
             self.sprites, 
             self.snake.segments

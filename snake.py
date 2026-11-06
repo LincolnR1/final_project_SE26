@@ -2,10 +2,11 @@
 
 class Snake:
     """Represents a snake on the grid"""
-    def __init__(self, start_position, direction=(1,0), length=3):
+    def __init__(self, start_position, color, direction=(1,0), length=3):
         self.direction = direction
         self.next_direction = direction
         self.segments = []
+        self.color = color
 
         #boost settings 
         self.max_boost_energy = 100.0

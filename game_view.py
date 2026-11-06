@@ -42,8 +42,8 @@ class GameView(arcade.View):
 
         #creates snakes, no clue if the coords are what we want them to be or not yet though
         #created enemy snake 11/1 TW
-        self.player_snake = snake.Snake(start_position=(5, 4), direction=(1, 0), length=3)
-        self.enemy_snake = snake.Snake(start_position=(15, 4), direction=(-1, 0))
+        self.player_snake = snake.Snake(start_position=(5, 4), direction=(1, 0), length=3, color=arcade.csscolor.GREEN)
+        self.enemy_snake = snake.Snake(start_position=(15, 4), direction=(-1, 0), color=arcade.csscolor.RED)
 
    #     self.barrier_list = arcade.AStarBarrierList(self.enemy_snake, self.wall_list, CELL_SIZE,0,0,1280, 720)
         self.round = None
@@ -125,10 +125,7 @@ class GameView(arcade.View):
 
 
 
-    def on_update(self, delta_time):
-        """Update boost energy and snake movement."""
-        self.round.update(delta_time)
-        self.check_objective()
+   
 
 
     def handle_movement(self, player, direction):
@@ -172,11 +169,17 @@ class GameView(arcade.View):
         )
        # self.physics_engine = arcade.PhysicsEngineSimple(walls=self.scene["Walls"])
 
+    def on_update(self, delta_time):
+        """Update boost energy and snake movement."""
+        self.round.update(delta_time)
+        self.check_objective()
+
     def on_draw(self):
         """Render the screen."""
         self.clear()
         self.scene.draw()
         self.draw_objective()
+        
         self.round.snake_visuals[1].sprites.draw()
         self.round.snake_visuals[2].sprites.draw()
 
