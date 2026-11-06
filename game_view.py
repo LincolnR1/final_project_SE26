@@ -4,6 +4,7 @@ import arcade
 import key_controller
 import snake
 import random
+from col_and_round import Round
 
 
 #Note to self, for camera, for the game to fit like we want it to:
