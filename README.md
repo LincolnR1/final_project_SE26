@@ -28,3 +28,6 @@ Missed this sprint:
 
 ### Title Screen
 - completly works, no issues
+
+### pylint
+- [ ] bones here
