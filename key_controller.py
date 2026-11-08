@@ -1,10 +1,9 @@
 """Human input reading"""
 import arcade
 class KeyController:
-    # processes input from the detected keys
-
+    """Processes input from the detected keys for player snake and enemy snake"""
     def get_movement(self, key):
-        # controls player 1's movements
+        """controls player 1's movements"""
         if key == arcade.key.UP:
             player = 1
             direction = (0,1)
@@ -45,8 +44,5 @@ class KeyController:
             player = 2
             direction = (1,0)
             return (player, direction)
-
         else:
             return None
-
-

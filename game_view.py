@@ -1,14 +1,12 @@
 """The view of the main game window"""
-
+import random
 import arcade
 import key_controller
 import snake
-import random
 from col_and_round import Round
 import consts
 
 #Note to self, for camera, for the game to fit like we want it to:
-
 # Window configuration
 WIDTH = consts.WIDTH
 HEIGHT = consts.HEIGHT
@@ -24,6 +22,7 @@ GRID_ROWS = HEIGHT // CELL_SIZE
 
 
 class GameView(arcade.View):
+    """The view of the main game window, loads in the objectives and movement"""
     def __init__(self):
         super().__init__()
         self.key_controller = key_controller.KeyController()
@@ -38,10 +37,11 @@ class GameView(arcade.View):
 
         #creates snakes, no clue if the coords are what we want them to be or not yet though
         #created enemy snake 11/1 TW
-        self.player_snake = snake.Snake(start_position=(5, 4), direction=(1, 0), length=3, color=arcade.csscolor.GREEN)
-        self.enemy_snake = snake.Snake(start_position=(15, 4), direction=(-1, 0), color=arcade.csscolor.RED)
-
-   #     self.barrier_list = arcade.AStarBarrierList(self.enemy_snake, self.wall_list, CELL_SIZE,0,0,1280, 720)
+        self.player_snake = snake.Snake(start_position=(5, 4), direction=(1, 0),
+                                        length=3, color=arcade.csscolor.GREEN)
+        self.enemy_snake = snake.Snake(start_position=(15, 4), direction=(-1, 0),
+                                       color=arcade.csscolor.RED)
+   #    self.barrier_list = arcade.AStarBarrierList(self.enemy_snake, self.wall_list, CELL_SIZE,0,0,1280, 720)
         self.round = None
         self.move_timer = 0.0
         self.scene = None
@@ -49,7 +49,8 @@ class GameView(arcade.View):
         self.objective = None
 
 
-    # Basically goes through cells and keeps track of ones where the snake is, etc, need to add walls and obstacles to this
+    # Basically goes through cells and keeps track of ones where the snake is,
+    # etc, need to add walls and obstacles to this
     def occupied_cells(self) -> set:
         cells = set()
         for current_snake in (self.player_snake, self.enemy_snake):
@@ -118,11 +119,6 @@ class GameView(arcade.View):
             return
 
         self.handle_movement(2, direction)
-
-
-
-   
-
 
     def handle_movement(self, player, direction):
         # handles snakes as far as what is what and who is who
@@ -193,7 +189,6 @@ class GameView(arcade.View):
         #         self.snake.boost_energy /
         #         self.snake.max_boost_energy
         # )
-       
         # arcade.draw_lbwh_rectangle_filled(
         #     20, HEIGHT - 40,
         #         200 * energy_ratio, 20,

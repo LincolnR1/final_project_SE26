@@ -1,18 +1,16 @@
-
-#here are the basic ideas of the collision detection and round setup
+"""
+This file has the basic ideas of the collision detection and round setup
+NOTE: eventually this file will be moving the snakes instead of game_view
+the stuff I have added is built with that in mind but could also be altered
+"""
 import arcade
 import consts
 
-# NOTE: eventually this file will be moving the snakes instead of game_view
-# the stuff I have added is built with that in mind but could also be altered
-
-    
 
 CELL_SIZE = consts.CELL_SIZE
 
 class Round:
     """Manages gameplay for the current round."""
-
     def __init__(self, snake1, snake2, wall_sprites):
         self.snakes = {
             1: snake1,
@@ -23,20 +21,14 @@ class Round:
             1: SnakeSprites(snake1),
             2: SnakeSprites(snake2)
         }
-   
-        
         #both accessible as self.snakes[1 or 2] and self.snake_visuals[1 or 2]
-
         self.wall_sprites = wall_sprites
-
         self.move_timers = {
             1: 0.0,
             2: 0.0
-        } 
-
+        }
         self.normal_interval = 0.15
         self.boost_interval = 0.075
-
         # keep track of lives
         self.lives = {
             1: 3,
@@ -54,11 +46,10 @@ class Round:
             1: False,
             2: False
         }
-
         self.respawn_delay = 1.5
 
     def update(self, delta_time):
-
+        """Updates and checks for wall and snake collisions. It also checks if snake is boosting"""
         for player, snake in self.snakes.items():
             snake.update_boost(delta_time)
 
@@ -110,6 +101,7 @@ class Round:
         return bool(collisions)
 
     def handle_collision(self, player):
+        """Handles wall collisions."""
         if self.respawning[player]:
             return
 
@@ -137,17 +129,13 @@ class SnakeSprites:
     logic seperate in snake.py, observes the snakes state and updates sprites accordingly"""
 
     #NOTE:eventually when Round moves a snake it will look like:
-    #
     # init()
     #   self.snake_visual = SnakeSprites(self.snake)
-    #
     # on_update()
     #   snake.move() - moves the acutal snake
-    #   snake_visual.sync_positions() - observes the snake and updates sprites 
-    #
+    #   snake_visual.sync_positions() - observes the snake and updates sprites
     # on_draw() in game_view
     #   self.snake_visual.sprites.draw()
-    # 
     # all of that together will move the snake and update the
     # sprites(which are more like hitboxes) to match so collisions 
     # can be checked using arcades functions
@@ -157,27 +145,16 @@ class SnakeSprites:
         self.sprites = arcade.SpriteList()
 
         for position in self.snake.segments:
-            sprite = arcade.SpriteSolidColor(
-                CELL_SIZE, 
-                CELL_SIZE, 
-                color=snake.color
-            )
-
+            sprite = arcade.SpriteSolidColor(CELL_SIZE, CELL_SIZE, color=snake.color)
             sprite.position = grid_to_pixel(position)
-
             self.sprites.append(sprite)
         # allows us to identify the head as head_sprite = self.sprites[0]
 
     def sync_positions(self):
         """Update sprite positions to match snake segments"""
-        for sprite, position in zip(
-            self.sprites, 
-            self.snake.segments
-        ):
+        for sprite, position in zip(self.sprites, self.snake.segments):
             sprite.position = grid_to_pixel(position)
-    
     @property
     def head(self):
         """Return  snakes head sprite, allows access as '{variable_for_snake_sprite}.head'"""
         return self.sprites[0]
-    
