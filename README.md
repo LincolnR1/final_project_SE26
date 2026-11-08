@@ -5,8 +5,9 @@
 Directions: Run main.py and use arrow keys to see the map and control the snake.
 
 Missed this sprint:
-- Collisions and window borders, they are first on the list for the next sprint but we have to iron out our idea for handling the snakes
-(i.e. Sprite class from PyArcade or no Sprite class)
+- One round of gameplay, the starter variables are there but we did not end up having time to fully implement.
+- Simple AI pathfinding with the sprite class and new movement logic, the code is written but there are bugs still. 
+- Collisions and window border management, detection is working but as of now nothing happens when a collision is detected. Collision responses are first on the list for the next sprint.
 
 ---
 
@@ -35,4 +36,4 @@ Missed this sprint:
 - [ ] bones here
 - Tsering
 
-- Whole team worked together to put all the individual developments together into the final product for this sprint
+- Whole team worked together using 4-way "pair" programming to put all the individual developments together into the final product for this sprint.
