@@ -5,7 +5,6 @@
 Directions: Run main.py and use arrow keys to see the map and control the snake.
 
 Missed this sprint:
-- Have not kept up with PyLint, intending to start and get everything clean before next sprint. 
 - Collisions and window borders, they are first on the list for the next sprint but we have to iron out our idea for handling the snakes
 (i.e. Sprite class from PyArcade or no Sprite class)
 
@@ -21,13 +20,19 @@ Missed this sprint:
 ### Collisions
 - working
 - detection for hitting a wall, detection for hitting players completly working
+- Lincoln and Miles worked on this part
 
 ### Basic AI player
 - the bones are working
 - basic AI is implemented, pathfinding needs some updating
+- Tsering and Cooper worked on this part
 
 ### Title Screen
 - completly works, no issues
+- Cooper
 
 ### pylint
 - [ ] bones here
+- Tsering
+
+- Whole team worked together to put all the individual developments together into the final product for this sprint
