@@ -3,7 +3,7 @@ Main file. Loads Arcade window and Game View (and eventually others) on top of i
 """
 import arcade
 import consts
-from title_screen import Title_Screen
+from title_screen import TitleScreen
 
 class SnakeGame(arcade.Window):
     """
@@ -16,7 +16,7 @@ class SnakeGame(arcade.Window):
 def main():
     """Main function"""
     window = arcade.Window(consts.WINDOW_WIDTH, consts.WINDOW_HEIGHT, consts.WINDOW_TITLE, center_window=True)
-    window.show_view(Title_Screen())
+    window.show_view(TitleScreen())
     arcade.run()
 
 if __name__ == "__main__":

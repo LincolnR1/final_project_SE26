@@ -1,4 +1,4 @@
-"""Controls snake position and state (collision, length, boost, etc)"""
+"""Controls snake position and state (collision, length, boost, etc.)"""
 
 class Snake:
     """Represents a snake on the grid"""
@@ -7,8 +7,7 @@ class Snake:
         self.next_direction = direction
         self.segments = []
         self.color = color
-
-        #boost settings 
+        #boost settings
         self.max_boost_energy = 100.0
         self.boost_energy = self.max_boost_energy
 
@@ -61,12 +60,9 @@ class Snake:
         if len(self.segments) > 1:
             if new_direction == (-dx, -dy):
                 return False
-
         self.next_direction = new_direction
-
         return True
 
-    
     def set_boosting(self, active):
         """Start or stop boost."""
 
@@ -79,27 +75,23 @@ class Snake:
 
     # round.py will call this method
     ## NOTE:
-    """KeyController identifies the boost input.
+    """ 
+    KeyController identifies the boost input.
     GameView forwards the request to Round.
     Round finds Player 1's snake and calls snake.set_boosting(True).
     Each frame, Round calls snake.update_boost(delta_time).
-    Round checks snake.is_boosting to determine how frequently to call snake.move().""" 
-    """GameView drives the update cycle, Round schedules gameplay movement, and Snake executes individual moves."""
+    Round checks snake.is_boosting to determine how frequently to call snake.move().
+    GameView drives the update cycle, Round schedules gameplay movement, 
+    and Snake executes individual moves.
+    """
     def update_boost(self, delta_time):
         """Update boost based on time."""
-
         if self.is_boosting:
             self.boost_energy -= self.boost_drain_rate * delta_time
-
             if self.boost_energy <= 0:
                 self.boost_energy = 0
                 self.is_boosting = False
-
         else:
             self.boost_energy += self.boost_regen_rate * delta_time
-
-            self.boost_energy = min(
-                self.boost_energy,
-                self.max_boost_energy
-            )
+            self.boost_energy = min(self.boost_energy, self.max_boost_energy)
     

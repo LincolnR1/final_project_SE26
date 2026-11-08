@@ -29,19 +29,16 @@ class GameView(arcade.View):
         # self.tile_map
         self.background_color = arcade.csscolor.LIGHT_GREEN
         self.tile_map = None
-
-       #self.wall_list = arcade.SpriteList(use_spatial_hash=True,
+        #self.wall_list = arcade.SpriteList(use_spatial_hash=True,
         #                                   spatial_hash_cell_size=128)
 
-
-
         #creates snakes, no clue if the coords are what we want them to be or not yet though
-        #created enemy snake 11/1 TW
         self.player_snake = snake.Snake(start_position=(5, 4), direction=(1, 0),
                                         length=3, color=arcade.csscolor.GREEN)
         self.enemy_snake = snake.Snake(start_position=(15, 4), direction=(-1, 0),
                                        color=arcade.csscolor.RED)
-   #    self.barrier_list = arcade.AStarBarrierList(self.enemy_snake, self.wall_list, CELL_SIZE,0,0,1280, 720)
+    # self.barrier_list = arcade.AStarBarrierList(self.enemy_snake,
+        # self.wall_list, CELL_SIZE,0,0,1280, 720)
         self.round = None
         self.move_timer = 0.0
         self.scene = None
@@ -49,16 +46,15 @@ class GameView(arcade.View):
         self.objective = None
 
 
-    # Basically goes through cells and keeps track of ones where the snake is,
-    # etc, need to add walls and obstacles to this
     def occupied_cells(self) -> set:
+        """Basically goes through cells and keeps track of ones where the snake is,"""
         cells = set()
         for current_snake in (self.player_snake, self.enemy_snake):
             cells.update(current_snake.segments)
         return cells
 
-    # Spawns the square in a random spot for which is not being occupied
     def spawn_objective(self) -> None:
+        """Spawns the square in a random spot for which is not being occupied."""
         occupied = self.occupied_cells()
         free_cells = [(col, row)
                       for col in range(GRID_COLS)
@@ -66,8 +62,8 @@ class GameView(arcade.View):
                       if (col, row) not in occupied]
         self.objective = random.choice(free_cells)
 
-    # Draws the objective rectangle
     def draw_objective(self) -> None:
+        """Draws the objective square(the goal)"""
         if self.objective is None:
             return
         col, row = self.objective
@@ -77,30 +73,28 @@ class GameView(arcade.View):
             arcade.color.ELECTRIC_BLUE,
             )
 
-    # checks of the snake head hit the objective
     def check_objective(self) -> None:
+        """Checks if the snake head has hit the objective."""
         for current_snake in (self.player_snake, self.enemy_snake):
             if current_snake.segments[0] == self.objective:
                 self.spawn_objective()
                 return
 
     def on_key_press(self, symbol, modifiers):
+        """Controls keyboard input."""
         movement = self.key_controller.get_movement(symbol)
         if movement is not None:
             player, direction = movement
 
             if player == 1:
-            # Next line is a just and idea as we do  not have anything implemented yet
+            # Next line is a just and idea as we do not have anything implemented yet
                 self.handle_movement(player, direction)
 
     def update_enemy_direction(self):
-
-        #
+        """ Looks at enemy snakes current coordinates and compares them to
+         the objectives coordinates and adjusts the coordinates based on them."""
         if self.objective is None:
             return
-
-        # Looks at enemy snakes current coordinates and compares them to
-        # the objectives coordinates and adjusts the coordinates based on them
         enemy_x, enemy_y = self.enemy_snake.segments[0]
         target_x, target_y = self.objective
 
@@ -121,7 +115,7 @@ class GameView(arcade.View):
         self.handle_movement(2, direction)
 
     def handle_movement(self, player, direction):
-        # handles snakes as far as what is what and who is who
+        """handles snakes as far as what is what and who is who"""
         if player == 1:
             selected_snake = self.player_snake
         elif player == 2:
@@ -138,9 +132,7 @@ class GameView(arcade.View):
         # snake.segments.pop()
 
     def on_show_view(self):
-        """
-        We load all the snake games maps here
-        """
+        """Loads in all the snake games maps here"""
         layer_options = {
             "Walls": {"use_spatial_hash": True,
                       "scaling": 1.0},
@@ -182,8 +174,6 @@ class GameView(arcade.View):
         #     200, 20,
         #     arcade.color.DARK_GRAY
         # )
-
-        
         # Draw current boost energy
         # energy_ratio = (
         #         self.snake.boost_energy /
@@ -215,10 +205,3 @@ class GameView(arcade.View):
         #     arcade.color.WHITE,
         #     12
         # )
-
-
-
-
-
-
-

@@ -1,7 +1,9 @@
-from game_view import GameView
-import arcade
+"""Title screen of the game"""
 import math
-class Title_Screen(arcade.View):
+import arcade
+from game_view import GameView
+class TitleScreen(arcade.View):
+    """Title screen of the game, then transitions to the game screen."""
     def __init__(self):
         super().__init__()
         self.time = 0.0
@@ -33,8 +35,8 @@ class Title_Screen(arcade.View):
         "This will transition to the game screen."
         self.window.show_view(GameView())
 
-    def on_key_press(self, key, modifiers) -> None:
-        if key in (arcade.key.SPACE, arcade.key.ENTER):
+    def on_key_press(self, symbol, modifiers) -> None:
+        if symbol in (arcade.key.SPACE, arcade.key.ENTER):
             self.window.show_view(GameView())
-        elif key == arcade.key.ESCAPE:
+        elif symbol == arcade.key.ESCAPE:
             arcade.exit()

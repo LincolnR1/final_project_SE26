@@ -3,46 +3,46 @@ import arcade
 class KeyController:
     """Processes input from the detected keys for player snake and enemy snake"""
     def get_movement(self, key):
-        """controls player 1's movements"""
+        """Controls Player 1 and Player 2's movements"""
         if key == arcade.key.UP:
             player = 1
             direction = (0,1)
             return (player, direction)
 
-        elif key == arcade.key.DOWN:
+        if key == arcade.key.DOWN:
             player = 1
             direction = (0,-1)
             return (player, direction)
 
-        elif key == arcade.key.LEFT:
+        if key == arcade.key.LEFT:
             player = 1
             direction = (-1,0)
             return (player, direction)
 
-        elif key == arcade.key.RIGHT:
+        if key == arcade.key.RIGHT:
             player = 1
             direction = (1,0)
             return (player, direction)
 
         # Controls player 2's movements
-        elif key == arcade.key.W:
+        if key == arcade.key.W:
             player = 2
             direction = (0,1)
             return (player, direction)
 
-        elif key == arcade.key.S:
+        if key == arcade.key.S:
             player = 2
             direction = (0,-1)
             return (player, direction)
 
-        elif key == arcade.key.A:
+        if key == arcade.key.A:
             player = 2
             direction = (-1,0)
             return (player, direction)
 
-        elif key == arcade.key.D:
+        if key == arcade.key.D:
             player = 2
             direction = (1,0)
             return (player, direction)
-        else:
-            return None
+
+        return None
