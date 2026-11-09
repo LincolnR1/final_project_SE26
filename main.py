@@ -15,7 +15,8 @@ class SnakeGame(arcade.Window):
 
 def main():
     """Main function"""
-    window = arcade.Window(consts.WINDOW_WIDTH, consts.WINDOW_HEIGHT, consts.WINDOW_TITLE, center_window=True)
+    window = arcade.Window(consts.WINDOW_WIDTH, consts.WINDOW_HEIGHT,
+                           consts.WINDOW_TITLE, center_window=True)
     window.show_view(TitleScreen())
     arcade.run()
 

@@ -74,7 +74,6 @@ class Snake:
         return True
 
     # round.py will call this method
-    ## NOTE:
     """ 
     KeyController identifies the boost input.
     GameView forwards the request to Round.
@@ -94,4 +93,3 @@ class Snake:
         else:
             self.boost_energy += self.boost_regen_rate * delta_time
             self.boost_energy = min(self.boost_energy, self.max_boost_energy)
-    

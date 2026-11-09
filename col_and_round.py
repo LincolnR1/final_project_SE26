@@ -136,8 +136,7 @@ class SnakeSprites:
     #   snake_visual.sync_positions() - observes the snake and updates sprites
     # on_draw() in game_view
     #   self.snake_visual.sprites.draw()
-    # all of that together will move the snake and update the
-    # sprites(which are more like hitboxes) to match so collisions 
+    # all of that together will move the snake and update the sprites to match collisions
     # can be checked using arcades functions
 
     def __init__(self, snake):
