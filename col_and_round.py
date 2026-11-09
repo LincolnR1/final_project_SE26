@@ -9,9 +9,14 @@ import consts
 
 CELL_SIZE = consts.CELL_SIZE
 
+
+# Movement intervals (seconds per cell)
+NORMAL_INTERVAL = consts.NORMAL_INTERVAL
+BOOST_INTERVAL = consts.BOOST_INTERVAL
+
 class Round:
     """Manages gameplay for the current round."""
-    def __init__(self, snake1, snake2, wall_sprites):
+    def __init__(self, snake1, snake2, wall_sprites, objective=None):
         self.snakes = {
             1: snake1,
             2: snake2
@@ -23,12 +28,13 @@ class Round:
         }
         #both accessible as self.snakes[1 or 2] and self.snake_visuals[1 or 2]
         self.wall_sprites = wall_sprites
+        self.objective = objective
         self.move_timers = {
             1: 0.0,
             2: 0.0
         }
-        self.normal_interval = 0.15
-        self.boost_interval = 0.075
+        self.normal_interval = NORMAL_INTERVAL
+        self.boost_interval = BOOST_INTERVAL
         # keep track of lives
         self.lives = {
             1: 3,
@@ -61,6 +67,8 @@ class Round:
             self.move_timers[player] += delta_time
 
             while self.move_timers[player] >= interval:
+                if player == 2:
+                    self.update_enemy_direction()
                 snake.move()
                 self.snake_visuals[player].sync_positions()
 
@@ -117,6 +125,39 @@ class Round:
 
         self.respawning[player] = True
         self.respawn_timers[player] = self.respawn_delay
+
+    def update_enemy_direction(self):
+        """Choose the enemy's direction toward the objective."""
+
+        if self.objective is None:
+            return
+
+        enemy = self.snakes[2]
+
+        enemy_x, enemy_y = enemy.segments[0]
+        target_x, target_y = self.objective
+
+        if target_x > enemy_x:
+            direction = (1, 0)
+        elif target_y > enemy_y:
+            direction = (0, 1)
+        elif target_y < enemy_y:
+            direction = (0, -1)
+        elif target_x < enemy_x:
+            direction = (-1, 0)
+        else:
+            return
+
+        if not enemy.set_direction(direction):
+            # if reversing is illegal, try a perpendicular turn
+            if enemy.direction[0] == 0:
+                enemy.set_direction((-1, 0) if target_x < enemy_x else (1, 0))
+            else:
+                enemy.set_direction((0, -1) if target_y < enemy_y else (0, 1))
+
+    def set_objective(self, position):
+        """Set the objective's grid position."""
+        self.objective = position
 
 def grid_to_pixel(pos):
     """Helper function to convert a grid position to pixel coordinates"""

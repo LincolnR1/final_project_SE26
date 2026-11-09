@@ -12,10 +12,6 @@ WIDTH = consts.WIDTH
 HEIGHT = consts.HEIGHT
 CELL_SIZE = consts.CELL_SIZE
 
-# Movement intervals (seconds per cell)
-NORMAL_INTERVAL = consts.NORMAL_INTERVAL
-BOOST_INTERVAL = consts.BOOST_INTERVAL
-
 # For spawning in objectives
 GRID_COLS = WIDTH // CELL_SIZE
 GRID_ROWS = HEIGHT // CELL_SIZE
@@ -38,12 +34,8 @@ class GameView(arcade.View):
         self.enemy_snake = snake.Snake(start_position=(15, 4), direction=(-1, 0),
                                        color=arcade.csscolor.RED)
     # self.barrier_list = arcade.AStarBarrierList(self.enemy_snake,
-        # self.wall_list, CELL_SIZE,0,0,1280, 720)
         self.round = None
-        self.move_timer = 0.0
         self.scene = None
-
-        self.objective = None
 
 
     def occupied_cells(self) -> set:
@@ -60,13 +52,13 @@ class GameView(arcade.View):
                       for col in range(GRID_COLS)
                       for row in range(GRID_ROWS)
                       if (col, row) not in occupied]
-        self.objective = random.choice(free_cells)
+        self.round.set_objective(random.choice(free_cells))
 
     def draw_objective(self) -> None:
         """Draws the objective square(the goal)"""
-        if self.objective is None:
+        if self.round.objective is None:
             return
-        col, row = self.objective
+        col, row = self.round.objective
         arcade.draw_lbwh_rectangle_filled(
             col * CELL_SIZE + 2, row * CELL_SIZE + 2,
             CELL_SIZE - 4, CELL_SIZE - 4,
@@ -76,7 +68,7 @@ class GameView(arcade.View):
     def check_objective(self) -> None:
         """Checks if the snake head has hit the objective."""
         for current_snake in (self.player_snake, self.enemy_snake):
-            if current_snake.segments[0] == self.objective:
+            if current_snake.segments[0] == self.round.objective:
                 self.spawn_objective()
                 return
 
@@ -90,30 +82,6 @@ class GameView(arcade.View):
             # Next line is a just and idea as we do not have anything implemented yet
                 self.handle_movement(player, direction)
 
-    def update_enemy_direction(self):
-        """ Looks at enemy snakes current coordinates and compares them to
-         the objectives coordinates and adjusts the coordinates based on them."""
-        if self.objective is None:
-            return
-        enemy_x, enemy_y = self.enemy_snake.segments[0]
-        target_x, target_y = self.objective
-
-        if target_x > enemy_x:
-            direction = (1, 0)
-
-        elif target_y > enemy_y:
-            direction = (0, 1)
-
-        elif target_y < enemy_y:
-            direction = (0, -1)
-
-        elif target_x < enemy_x:
-            direction = (-1, 0)
-        else:
-            return
-
-        self.handle_movement(2, direction)
-
     def handle_movement(self, player, direction):
         """handles snakes as far as what is what and who is who"""
         if player == 1:
@@ -124,12 +92,6 @@ class GameView(arcade.View):
             return None
         # sets snake direction
         return selected_snake.set_direction(direction)
-
-        # tells snake where to move
-        # new_x = snake.segments[0][0] + snake.direction[0]
-        # new_y = snake.segments[0][1] + snake.direction[1]
-        # snake.segments.insert(0, (new_x, new_y))
-        # snake.segments.pop()
 
     def on_show_view(self):
         """Loads in all the snake games maps here"""
@@ -142,15 +104,17 @@ class GameView(arcade.View):
         self.tile_map = arcade.load_tilemap("maps/CS3050_final_project_level1.tmx",
                                             scaling=1, layer_options=layer_options)
         self.scene = arcade.Scene.from_tilemap(self.tile_map)
-        self.spawn_objective()
+        
 
         wall_sprites = self.scene.get_sprite_list("Walls")
 
         self.round = Round(
             self.player_snake,
             self.enemy_snake,
-            wall_sprites
+            wall_sprites,
+            objective=(12,8)
         )
+        self.spawn_objective()
        # self.physics_engine = arcade.PhysicsEngineSimple(walls=self.scene["Walls"])
 
     def on_update(self, delta_time):
