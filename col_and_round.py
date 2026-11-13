@@ -93,6 +93,7 @@ class Round:
 
         return bool(collisions)
 
+    ##wrong not working properly
     def check_snake_collision(self, player):
         """Check is there are collisions between players"""
         head = player[0]
