@@ -16,7 +16,8 @@ BOOST_INTERVAL = consts.BOOST_INTERVAL
 
 class Round:
     """Manages gameplay for the current round."""
-    def __init__(self, snake1, snake2, wall_sprites, objective=None):
+    def __init__(self, snake1, snake2, wall_sprites, objective=None, game_mode = "vs_ai"):
+
         self.snakes = {
             1: snake1,
             2: snake2
@@ -54,6 +55,8 @@ class Round:
         }
         self.respawn_delay = 1.5
 
+        self.game_mode = game_mode
+
     def update(self, delta_time):
         """Updates and checks for wall and snake collisions. It also checks if snake is boosting"""
         for player, snake in self.snakes.items():
@@ -66,8 +69,10 @@ class Round:
 
             self.move_timers[player] += delta_time
 
+
             while self.move_timers[player] >= interval:
-                if player == 2:
+                # Makes it so it only runs AI if it is in AI game_mode
+                if player == 2 and self.game_mode == "vs_ai":
                     self.update_enemy_direction()
                 snake.move()
                 self.snake_visuals[player].sync_positions()

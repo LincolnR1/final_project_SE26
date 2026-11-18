@@ -19,12 +19,13 @@ GRID_ROWS = HEIGHT // CELL_SIZE
 
 class GameView(arcade.View):
     """The view of the main game window, loads in the objectives and movement"""
-    def __init__(self):
+    def __init__(self, game_mode):
         super().__init__()
         self.key_controller = key_controller.KeyController()
         # self.tile_map
         self.background_color = arcade.csscolor.LIGHT_GREEN
         self.tile_map = None
+        self.game_mode = game_mode
         #self.wall_list = arcade.SpriteList(use_spatial_hash=True,
         #                                   spatial_hash_cell_size=128)
 
@@ -78,7 +79,8 @@ class GameView(arcade.View):
         if movement is not None:
             player, direction = movement
 
-            if player == 1:
+            # makes it so if game_mode is 2 player allows for handle of movements for player 2
+            if player == 1 or (player ==2 and self.game_mode =="2_player"):
             # Next line is a just and idea as we do not have anything implemented yet
                 self.handle_movement(player, direction)
 
@@ -112,7 +114,8 @@ class GameView(arcade.View):
             self.player_snake,
             self.enemy_snake,
             wall_sprites,
-            objective=(12,8)
+            objective=(12,8),
+            game_mode = self.game_mode
         )
         self.spawn_objective()
        # self.physics_engine = arcade.PhysicsEngineSimple(walls=self.scene["Walls"])
