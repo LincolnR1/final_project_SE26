@@ -46,3 +46,10 @@ class KeyController:
             return (player, direction)
 
         return None
+
+    def get_boost(self, key):
+        """Returns player requesting boost"""
+        if key == arcade.key.LSHIFT:
+            return 2
+        if key == arcade.key.RSHIFT:
+            return 1

@@ -36,6 +36,7 @@ class GameView(arcade.View):
     # self.barrier_list = arcade.AStarBarrierList(self.enemy_snake,
         self.round = None
         self.scene = None
+        arcade.enable_timings()
 
 
     def occupied_cells(self) -> set:
@@ -78,9 +79,27 @@ class GameView(arcade.View):
         if movement is not None:
             player, direction = movement
 
-            if player == 1:
-            # Next line is a just and idea as we do not have anything implemented yet
-                self.handle_movement(player, direction)
+            # if player == 1:
+            # # Next line is a just and idea as we do not have anything implemented yet
+            #     self.handle_movement(player, direction)
+            self.handle_movement(player, direction)
+
+        # Handle boost input
+        boost_player = self.key_controller.get_boost(symbol)
+
+        if boost_player == 1:
+            self.player_snake.set_boosting(True)
+        elif boost_player == 2:
+            self.enemy_snake.set_boosting(True)
+
+    def on_key_release(self, symbol, modifiers):
+        """Stops boosting when the key is released."""
+        boost_player = self.key_controller.get_boost(symbol)
+
+        if boost_player == 1:
+            self.player_snake.set_boosting(False)
+        elif boost_player == 2:
+            self.enemy_snake.set_boosting(False)
 
     def handle_movement(self, player, direction):
         """handles snakes as far as what is what and who is who"""
@@ -131,6 +150,13 @@ class GameView(arcade.View):
 
         self.round.snake_visuals[1].sprites.draw()
         self.round.snake_visuals[2].sprites.draw()
+
+        arcade.draw_text(
+            f"FPS: {arcade.get_fps():.1f}",
+            10, 10,
+            arcade.color.WHITE,
+            14
+        )
 
         ##TODO: add boost functionality, code commented out for now
         #     # Draw boost energy bar background

@@ -18,8 +18,18 @@ class Round:
     """Manages gameplay for the current round."""
     def __init__(self, snake1, snake2, wall_sprites, objective=None):
         self.snakes = {
-            1: snake1,
-            2: snake2
+                    1: snake1,
+                    2: snake2
+        }
+
+        self.spawn_positions = {
+            player: snake.segments.copy()
+            for player, snake in self.snakes.items()
+        }
+
+        self.spawn_directions = {
+            player: snake.direction
+            for player, snake in self.snakes.items()
         }
 
         self.snake_visuals = {
@@ -57,7 +67,31 @@ class Round:
     def update(self, delta_time):
         """Updates and checks for wall and snake collisions. It also checks if snake is boosting"""
         for player, snake in self.snakes.items():
+            if self.respawning[player]:
+                if self.lives[player] > 0:
+                    self.respawn_timers[player] -= delta_time
+
+                    if self.respawn_timers[player] <= 0:
+                        # restore the snake's original position
+                        snake.segments = self.spawn_positions[player].copy()
+
+                        # restore its original direction
+                        snake.direction = self.spawn_directions[player]
+                        snake.next_direction = snake.direction
+
+                        # move the visual sprites to match
+                        self.snake_visuals[player].sync_positions()
+
+                        # allow movement again
+                        self.move_timers[player] = 0.0
+                        self.respawning[player] = False
+
+                        print(f"Player {player} respawned!")
+
+                continue
+
             snake.update_boost(delta_time)
+
 
             if snake.is_boosting:
                 interval = self.boost_interval
@@ -66,7 +100,10 @@ class Round:
 
             self.move_timers[player] += delta_time
 
-            while self.move_timers[player] >= interval:
+            if self.move_timers[player] >= interval:
+                # if player == 1:
+                #     print(f"Time between moves: {self.move_timers[player]:.3f}s")
+
                 if player == 2:
                     self.update_enemy_direction()
                 snake.move()
@@ -74,13 +111,15 @@ class Round:
 
                 # check for wall collisions
                 if self.check_wall_collision(self.snake_visuals[player].sprites):
-                    print(f"Player {player} hit a wall")
+                    self.handle_collision(player)
+                    break
 
                 # check for snake collisions
                 if self.check_snake_collision(self.snake_visuals[player].sprites):
                     print(f"Player {player} hit the opponent")
 
-                self.move_timers[player] -= interval
+                #self.move_timers[player] -= interval
+                self.move_timers[player] = 0.0
 
     def check_wall_collision(self, player):
         """Check if there are collisions between a players head and walls"""
@@ -159,6 +198,15 @@ class Round:
     def set_objective(self, position):
         """Set the objective's grid position."""
         self.objective = position
+
+    def is_wall(self, position):
+        """Check whether a grid position contains a wall."""
+        x, y = grid_to_pixel(position)
+
+        return bool(arcade.get_sprites_at_point(
+            (x, y),
+            self.wall_sprites
+        )) 
 
 def grid_to_pixel(pos):
     """Helper function to convert a grid position to pixel coordinates"""
